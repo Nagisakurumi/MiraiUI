@@ -1,0 +1,228 @@
+﻿<metro:MetroWindow x:Class="MiraiUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MiraiUI"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:dependency="clr-namespace:MiraiUI.Dependcys"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        Title="Mirai" Height="450" Width="800" x:Name="Main">
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/TabControlStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Styles/ConvertXaml.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <ImageBrush x:Key="MiraiTitle" ImageSource="/ResourceFiles/miraititle.png"  ></ImageBrush>
+            <ImageBrush x:Key="DefaultHeaderImage" ImageSource="/ResourceFiles/header.png"  ></ImageBrush>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+
+    <metro:MetroWindow.LeftWindowCommands>
+        <metro:WindowCommands>
+            <Button Background="{x:Null}" Width="30" Height="30">
+                <Image Source="/ResourceFiles/robot_add.png"></Image>
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.LeftWindowCommands>
+ 
+    <metro:MetroTabControl metro:TabControlHelper.Underlined="SelectedTabItem" TabStripPlacement="Left"
+                            >
+        <metro:MetroTabItem Header="机器人"  HeaderTemplate="{StaticResource TabItemHeaderDataTemp}">
+            <metro:HamburgerMenu x:Name="HamburgerMenuControl"
+                                DisplayMode="CompactOverlay"
+                                HamburgerWidth="48"
+                                PaneBackground="#ff3D3D55"
+                                SelectedItem="{Binding ElementName=Main,Path=Model.SelectedBot}"
+                                ItemsSource="{Binding Path=Model.Bots,ElementName=Main}"
+                                IsPaneOpen="{Binding Path=Model.IsOpen,ElementName=Main}"
+                                OptionsItemsSource="{StaticResource SettingSources}"
+                                VerticalScrollBarOnLeftSide="False">
+            <!--  Header  -->
+            <metro:HamburgerMenu.HamburgerMenuHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Foreground="White"
+                                Text="机器人列表" />
+                </DataTemplate>
+            </metro:HamburgerMenu.HamburgerMenuHeaderTemplate>
+
+            <metro:HamburgerMenu.OptionsItemTemplate>
+                <DataTemplate>
+                    <Button Background="{x:Null}" Width="50" Height="50" HorizontalAlignment="Left" Command="{Binding ElementName=Main,Path=Model.NewCommand}">
+                        <Border Background="{Binding Path=.}" Width="40" Height="38"></Border>
+                    </Button>
+                </DataTemplate>
+            </metro:HamburgerMenu.OptionsItemTemplate>
+
+            <metro:HamburgerMenu.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Border BorderBrush="{Binding IsLogin,Converter={StaticResource BoolToColorBrush}}" BorderThickness="2" Margin="5,0,0,0"
+                                VerticalAlignment="Center" HorizontalAlignment="Center" Width="30" Height="30" CornerRadius="10"
+                                Background="{StaticResource DefaultHeaderImage}">
+                        </Border>
+                        <TextBlock Grid.Column="1" Text="{Binding Account}" VerticalAlignment="Center" Margin="20,0,0,0"></TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </metro:HamburgerMenu.ItemTemplate>
+
+            <metro:HamburgerMenu.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Border Visibility="{Binding Path=IsLogin,Converter={StaticResource BoolToVisibleHidden_True}}">
+                                
+                        </Border>
+                        <Border Visibility="{Binding Path=IsLogin,Converter={StaticResource BoolToVisibleHidden_False}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Border Background="{StaticResource MiraiTitle}" Width="300" Grid.Row="1"></Border>
+
+                                <TextBox Grid.Row="2" Width="400" Height="60"
+                                        HorizontalContentAlignment="Stretch"
+                                        metro:TextBoxHelper.ClearTextButton="True"
+                                        metro:TextBoxHelper.IsWaitingForData="True"
+                                        metro:TextBoxHelper.UseFloatingWatermark="True"
+                                        metro:TextBoxHelper.Watermark="请输入账号"
+                                        Text="{Binding Path=Model.Bot.Account,ElementName=Main}"
+                                        metro:TextBoxHelper.WatermarkAlignment="Left"
+                                        SpellCheck.IsEnabled="True">       
+                                </TextBox>
+
+                                <PasswordBox Grid.Row="3" Width="400" Height="60"
+                                        dependency:PasswordBoxDependcy.PasswordValue="{Binding Path=Model.Bot.Password,ElementName=Main,UpdateSourceTrigger=PropertyChanged}"
+                                        metro:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(metro:TextBoxHelper.HasText), Mode=OneWay}"
+                                        metro:TextBoxHelper.IsWaitingForData="True"
+                                        metro:TextBoxHelper.UseFloatingWatermark="True"
+                                        metro:TextBoxHelper.Watermark="请输入密码"
+                                        x:Name="PasswordBox"
+                                                Style="{DynamicResource MahApps.Styles.PasswordBox.Button.Revealed}"
+                                        />
+
+                                <Button Width="200"  Height="40" FontSize="20" FontFamily="幼圆" Grid.Row="4"
+                                        Content="登陆" metro:ControlsHelper.CornerRadius="20"
+                                        Command="{Binding ElementName=Main,Path=Model.LoginCommand}" 
+                                        Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </metro:HamburgerMenu.ContentTemplate>
+        </metro:HamburgerMenu>
+        </metro:MetroTabItem>
+        <metro:MetroTabItem Header="插件" HeaderTemplate="{StaticResource TabItemHeaderDataTemp}">
+            <ListBox ItemsSource="{Binding ElementName=Main,Path=Model.Plugins}" UseLayoutRounding="True">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{x:Null}"></Setter>
+                                <Setter Property="BorderThickness" Value="0"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.Style>
+                    <Style TargetType="ListBox">
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+                    </Style>
+                </ListBox.Style>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" CornerRadius="5" BorderBrush="Gray" Width="300" Height="120" Margin="5" Background="#00000000" >
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect ShadowDepth="3" BlurRadius="5" Color="Gray" Direction="0"></DropShadowEffect>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="BorderThickness" Value="3"></Setter>
+                                            <Setter Property="BorderBrush" Value="#FFE2C826"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="60"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" OverridesDefaultStyle="True"
+                                           FontFamily="宋体" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+
+                                <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} - K">
+                                            <Binding Path="Size"></Binding>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+
+                                <TextBlock Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}日期 : {0}">
+                                            <Binding Path="DateTime"></Binding>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True"></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </metro:MetroTabItem>
+        <metro:MetroTabItem Header="设置" HeaderTemplate="{StaticResource TabItemHeaderDataTemp}">
+
+        </metro:MetroTabItem>
+        <metro:MetroTabItem Header="日志" HeaderTemplate="{StaticResource TabItemHeaderDataTemp}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                </Grid.RowDefinitions>
+                <RichTextBox 
+                                Padding="5"
+                                IsDocumentEnabled="True"
+                                IsReadOnly="True">
+                    <FlowDocument PageWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type RichTextBox}}, Path=ActualWidth}">
+                        <Paragraph x:Name="LogBox">
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+
+                <DockPanel LastChildFill="True" Grid.Row="1" >
+                    <TextBlock Text=">" VerticalAlignment="Center" FontFamily="宋体" FontSize="20"></TextBlock>
+                    <TextBox Grid.Row="1" Background="{x:Null}" BorderThickness="0" KeyUp="CommandEnter" Height="30" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16"></TextBox>
+                </DockPanel>
+            </Grid>
+        </metro:MetroTabItem>
+        <metro:MetroTabItem Header="关于" HeaderTemplate="{StaticResource TabItemHeaderDataTemp}">
+
+        </metro:MetroTabItem>
+    </metro:MetroTabControl>
+</metro:MetroWindow>

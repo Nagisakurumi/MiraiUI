@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>bitbug_favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ResourceFiles\array.png" />
+    <None Remove="ResourceFiles\header.png" />
+    <None Remove="ResourceFiles\miraititle.png" />
+    <None Remove="ResourceFiles\plugin.png" />
+    <None Remove="ResourceFiles\robot.png" />
+    <None Remove="ResourceFiles\robot_add.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.4" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.8.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+    <PackageReference Include="xyxandwxx.LobLib" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="ResourceFiles\miraititle.png" />
+    <Resource Include="ResourceFiles\header.png" />
+    <Resource Include="ResourceFiles\plugin.png" />
+    <Resource Include="ResourceFiles\robot.png" />
+    <Resource Include="ResourceFiles\array.png" />
+    <Resource Include="ResourceFiles\robot_add.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converts="clr-namespace:MiraiUI.Converts"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:collection="clr-namespace:System.Collections;assembly=System.Runtime"
+                    xmlns:items="clr-namespace:MiraiUI.Items"
+                    xmlns:local="clr-namespace:MiraiUI.Styles">
+
+
+    <collection:ArrayList x:Key="SettingSources">
+        <ImageBrush ImageSource="/ResourceFiles/robot_add.png"></ImageBrush>
+    </collection:ArrayList>
+    
+
+    <Visibility x:Key="Visible">Visible</Visibility>
+    <Visibility x:Key="Hidden">Hidden</Visibility>
+    <Visibility x:Key="Collapsed">Collapsed</Visibility>
+
+    <system:Boolean x:Key="BoolTrue">True</system:Boolean>
+    <system:Boolean x:Key="BoolFalse">False</system:Boolean>
+
+    <SolidColorBrush x:Key="RedBrush">Red</SolidColorBrush>
+    <SolidColorBrush x:Key="GreenBrush">Green</SolidColorBrush>
+
+    <BitmapImage x:Key="DefaultHeader" BaseUri="/ResourceFiles/头像.png" UriSource="/ResourceFiles/头像.png"></BitmapImage>
+    
+    <converts:ValueConvertToValue x:Key="BoolToVisibleHidden_True">
+        <converts:ValueConvertToValue.ItemChanges>
+            <items:ValueItem From="{StaticResource BoolTrue}" To="{StaticResource Visible}"></items:ValueItem>
+            <items:ValueItem From="{StaticResource BoolFalse}" To="{StaticResource Collapsed}"></items:ValueItem>
+        </converts:ValueConvertToValue.ItemChanges>
+    </converts:ValueConvertToValue>
+
+    <converts:ValueConvertToValue x:Key="BoolToVisibleHidden_False">
+        <converts:ValueConvertToValue.ItemChanges>
+            <items:ValueItem From="{StaticResource BoolFalse}" To="{StaticResource Visible}"></items:ValueItem>
+            <items:ValueItem From="{StaticResource BoolTrue}" To="{StaticResource Collapsed}"></items:ValueItem>
+        </converts:ValueConvertToValue.ItemChanges>
+    </converts:ValueConvertToValue>
+
+    <converts:ValueConvertToValue x:Key="BoolToColorBrush">
+        <converts:ValueConvertToValue.ItemChanges>
+            <items:ValueItem From="{StaticResource BoolFalse}" To="{StaticResource RedBrush}"></items:ValueItem>
+            <items:ValueItem From="{StaticResource BoolTrue}" To="{StaticResource GreenBrush}"></items:ValueItem>
+        </converts:ValueConvertToValue.ItemChanges>
+    </converts:ValueConvertToValue>
+
+
+    <converts:HeaderImageSourceConvert x:Key="HeaderImageConvert">
+        <converts:HeaderImageSourceConvert.ItemChanges>
+            <items:ValueItem From="{x:Null}" To="{StaticResource DefaultHeader}"></items:ValueItem>
+        </converts:HeaderImageSourceConvert.ItemChanges>
+    </converts:HeaderImageSourceConvert>
+</ResourceDictionary>
