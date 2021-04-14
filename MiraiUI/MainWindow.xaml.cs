@@ -32,7 +32,7 @@ namespace MiraiUI
         /// <summary>
         /// 数据
         /// </summary>
-        public MainModel Model { get; set; } = new MainModel();
+        public MainModel Model { get; set; }
 
         public MainWindow()
         {
@@ -53,6 +53,7 @@ namespace MiraiUI
         {
             try
             {
+                Model.SaveConfig();
                 if(Model.MiraiConsole != null)
                 {
                     Model.MiraiConsole.Dispose();
@@ -66,7 +67,15 @@ namespace MiraiUI
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.DataContext = Model;
+            try
+            {
+                Model = new MainModel();
+                this.DataContext = Model;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
         }
 
         /// <summary>

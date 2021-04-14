@@ -34,9 +34,9 @@
                                 DisplayMode="CompactOverlay"
                                 HamburgerWidth="48"
                                 PaneBackground="#ff3D3D55"
-                                SelectedItem="{Binding ElementName=Main,Path=Model.SelectedBot}"
-                                ItemsSource="{Binding Path=Model.Bots,ElementName=Main}"
-                                IsPaneOpen="{Binding Path=Model.IsOpen,ElementName=Main}"
+                                SelectedItem="{Binding Path=SelectedBot}"
+                                ItemsSource="{Binding Path=Bots}"
+                                IsPaneOpen="{Binding Path=IsOpen}"
                                 OptionsItemsSource="{StaticResource SettingSources}"
                                 VerticalScrollBarOnLeftSide="False">
             <!--  Header  -->
@@ -77,7 +77,7 @@
 
             <metro:HamburgerMenu.ContentTemplate>
                 <DataTemplate>
-                    <Grid>
+                     <Grid DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=metro:MetroTabControl}}">
                         <Border Visibility="{Binding Path=IsLogin,Converter={StaticResource BoolToVisibleHidden_True}}">
                                 
                         </Border>
@@ -100,13 +100,13 @@
                                         metro:TextBoxHelper.IsWaitingForData="True"
                                         metro:TextBoxHelper.UseFloatingWatermark="True"
                                         metro:TextBoxHelper.Watermark="请输入账号"
-                                        Text="{Binding Path=Model.Bot.Account,ElementName=Main}"
+                                        Text="{Binding Path=Bot.Account}"
                                         metro:TextBoxHelper.WatermarkAlignment="Left"
                                         SpellCheck.IsEnabled="True">       
                                 </TextBox>
 
                                 <PasswordBox Grid.Row="3" Width="400" Height="60"
-                                        dependency:PasswordBoxDependcy.PasswordValue="{Binding Path=Model.Bot.Password,ElementName=Main,UpdateSourceTrigger=PropertyChanged}"
+                                        dependency:PasswordBoxDependcy.PasswordValue="{Binding Path=Bot.Password,Mode=TwoWay}"
                                         metro:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(metro:TextBoxHelper.HasText), Mode=OneWay}"
                                         metro:TextBoxHelper.IsWaitingForData="True"
                                         metro:TextBoxHelper.UseFloatingWatermark="True"
@@ -116,8 +116,8 @@
                                         />
 
                                 <Button Width="200"  Height="40" FontSize="20" FontFamily="幼圆" Grid.Row="4"
-                                        Content="登陆" metro:ControlsHelper.CornerRadius="20"
-                                        Command="{Binding ElementName=Main,Path=Model.LoginCommand}" 
+                                        Content="登陆" metro:ControlsHelper.CornerRadius="20" 
+                                        Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=PasswordBox,Path=.}"
                                         Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" />
                             </Grid>
                         </Border>
@@ -127,7 +127,8 @@
         </metro:HamburgerMenu>
         </metro:MetroTabItem>
         <metro:MetroTabItem Header="插件" HeaderTemplate="{StaticResource TabItemHeaderDataTemp}">
-            <ListBox ItemsSource="{Binding ElementName=Main,Path=Model.Plugins}" UseLayoutRounding="True">
+            <ListBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=metro:MetroTabControl}}"
+                     ItemsSource="{Binding Path=Plugins}" UseLayoutRounding="True">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Style.Triggers>

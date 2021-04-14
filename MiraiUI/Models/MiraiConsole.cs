@@ -18,7 +18,7 @@ namespace MiraiUI.Models
         /// <summary>
         /// javar路径
         /// </summary>
-        public static string JavaPath { get; set; } = @"Mirai\runtime\bin\java.exe";
+        public static string JavaPath { get; set; } = @"Mirai\runtime\bin\mirai_java.exe";
         /// <summary>
         /// 日志
         /// </summary>
@@ -109,7 +109,9 @@ namespace MiraiUI.Models
             Process.BeginOutputReadLine();
             Process.BeginErrorReadLine();
             ProcessId = Process.Id;
-            Command("{0} {1} {2}".Format("login", Bot.Account, Bot.Password));
+            var command = "{0} {1} {2}".Format("login", Bot.Account, Bot.Password);
+            Logger.Log("执行命令 : {0}", command);
+            Command(command);
             return true;
         }
         /// <summary>
